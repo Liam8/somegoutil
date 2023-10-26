@@ -109,3 +109,22 @@ func TestMutexQueue_DequeueBlock(t *testing.T) {
 		t.Errorf("Cost %v, longer than expected.", elapsed)
 	}
 }
+
+func TestMutexQueue_DequeueBlockAbort(t *testing.T) {
+	q := NewMutexQueue[string](2)
+	item1 := "a"
+	go func ()  {
+		time.Sleep(10 * time.Millisecond)
+		_ = q.Enqueue(item1)
+	} ()
+
+	start := time.Now()
+	out, ok := q.DequeueWithBlock(1000)	//block and then return
+	elapsed := time.Since(start)
+	if !ok || out != item1 {
+		t.Errorf("MutexQueue.DequeueWithBlock() got = %v (ok=%v), want = %v", out, ok, item1)
+	}
+	if elapsed > 500 * time.Millisecond {
+		t.Errorf("Cost %v, longer than expected.", elapsed)
+	}
+}
