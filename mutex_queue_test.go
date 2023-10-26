@@ -2,6 +2,7 @@ package somegoutil
 
 import (
 	"testing"
+	"time"
 )
 
 func TestMutexQueue_Enqueue(t *testing.T) {
@@ -90,4 +91,21 @@ func TestMutexQueue_EnDequeue(t *testing.T) {
 		t.Errorf("MutexQueue.Dequeue() got = %v, want %v", out2, item2)
 	}
 
+}
+
+func TestMutexQueue_DequeueBlock(t *testing.T) {
+	q := NewMutexQueue[string](2)
+	item1 := "a"
+	_ = q.Enqueue(item1)
+
+	start := time.Now()
+	q.DequeueWithBlock(1000)	//won't block
+	q.DequeueWithBlock(10)		//should block for 10ms
+	elapsed := time.Since(start)
+	if elapsed < 10 * time.Millisecond {
+		t.Errorf("Cost %v, shorter than expected.", elapsed)
+	}
+	if elapsed > 20 * time.Millisecond {
+		t.Errorf("Cost %v, longer than expected.", elapsed)
+	}
 }

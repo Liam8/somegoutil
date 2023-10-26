@@ -1,6 +1,9 @@
 package somegoutil
 
-import "errors"
+import (
+	"errors"
+	"time"
+)
 
 
 type MutexQueue[T any] struct {
@@ -27,6 +30,15 @@ func (r *MutexQueue[T]) Dequeue() (T, bool) {
 	case item := <- r.buffer:
 		return item, true
 	default:
+		return *new(T), false
+	}
+}
+
+func (r *MutexQueue[T]) DequeueWithBlock(timeout int) (T, bool) {
+	select {
+	case item := <- r.buffer:
+		return item, true
+	case <-time.After(time.Duration(timeout) * time.Millisecond):
 		return *new(T), false
 	}
 }
