@@ -1,4 +1,4 @@
-package somegoutilities
+package somegoutil
 
 import "errors"
 
