@@ -25,7 +25,7 @@ func TestMutexQueue_Enqueue(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			r := &MutexQueue{
+			r := &MutexQueue[int]{
 				buffer: tt.fields.buffer,
 			}
 			if err := r.Enqueue(tt.args.item); (err != nil) != tt.wantErr {
@@ -54,7 +54,7 @@ func TestMutexQueue_Dequeue(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			r := &MutexQueue{
+			r := &MutexQueue[int]{
 				buffer: tt.fields.buffer,
 			}
 			got, got1 := r.Dequeue()
@@ -69,9 +69,9 @@ func TestMutexQueue_Dequeue(t *testing.T) {
 }
 
 func TestMutexQueue_EnDequeue(t *testing.T) {
-	q := NewMutexQueue(2)
-	item1 := 1
-	item2 := 2
+	q := NewMutexQueue[string](2)
+	item1 := "a"
+	item2 := "b"
 	in1 := q.Enqueue(item1)
 	in2 := q.Enqueue(item2)
 	if in1!=nil || in2!=nil {
