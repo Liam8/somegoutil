@@ -1,4 +1,4 @@
 module github.com/liam8/somegoutil
 
-go 1.21
+go 1.20
 
