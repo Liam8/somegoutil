@@ -6,11 +6,11 @@ import (
 
 type ConMap[K comparable, V any] struct {
 	data map[K]V
-	mu sync.RWMutex
+	mu   sync.RWMutex
 }
 
 func NewConMap[K comparable, V any]() *ConMap[K, V] {
-	return &ConMap[K, V] {
+	return &ConMap[K, V]{
 		data: make(map[K]V),
 	}
 }

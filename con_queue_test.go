@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func TestMutexQueue_Enqueue(t *testing.T) {
+func TestConQueue_Enqueue(t *testing.T) {
 	type fields struct {
 		buffer chan int
 	}
@@ -26,17 +26,17 @@ func TestMutexQueue_Enqueue(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			r := &MutexQueue[int]{
+			r := &ConQueue[int]{
 				buffer: tt.fields.buffer,
 			}
 			if err := r.Enqueue(tt.args.item); (err != nil) != tt.wantErr {
-				t.Errorf("MutexQueue.Enqueue() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ConQueue.Enqueue() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
 }
 
-func TestMutexQueue_Dequeue(t *testing.T) {
+func TestConQueue_Dequeue(t *testing.T) {
 	type fields struct {
 		buffer chan int
 	}
@@ -55,46 +55,46 @@ func TestMutexQueue_Dequeue(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			r := &MutexQueue[int]{
+			r := &ConQueue[int]{
 				buffer: tt.fields.buffer,
 			}
 			got, got1 := r.Dequeue()
 			if got != tt.want {
-				t.Errorf("MutexQueue.Dequeue() got = %v, want %v", got, tt.want)
+				t.Errorf("ConQueue.Dequeue() got = %v, want %v", got, tt.want)
 			}
 			if got1 != tt.want1 {
-				t.Errorf("MutexQueue.Dequeue() got1 = %v, want %v", got1, tt.want1)
+				t.Errorf("ConQueue.Dequeue() got1 = %v, want %v", got1, tt.want1)
 			}
 		})
 	}
 }
 
-func TestMutexQueue_EnDequeue(t *testing.T) {
-	q := NewMutexQueue[string](2)
+func TestConQueue_EnDequeue(t *testing.T) {
+	q := NewConQueue[string](2)
 	item1 := "a"
 	item2 := "b"
 	in1 := q.Enqueue(item1)
 	in2 := q.Enqueue(item2)
 	if in1!=nil || in2!=nil {
-		t.Errorf("MutexQueue.Eequeue() failed")
+		t.Errorf("ConQueue.Eequeue() failed")
 	}
 	in3 := q.Enqueue(item2)
 	if in3 == nil {
-		t.Errorf("MutexQueue.Eequeue() should be failed, but got no error.")
+		t.Errorf("ConQueue.Eequeue() should be failed, but got no error.")
 	}
 	out1, ok1 := q.Dequeue()
 	if !ok1 || out1 != item1 {
-		t.Errorf("MutexQueue.Dequeue() got = %v, want %v", out1, item1)
+		t.Errorf("ConQueue.Dequeue() got = %v, want %v", out1, item1)
 	}
 	out2, ok2 := q.Dequeue()
 	if !ok2 || out2 != item2 {
-		t.Errorf("MutexQueue.Dequeue() got = %v, want %v", out2, item2)
+		t.Errorf("ConQueue.Dequeue() got = %v, want %v", out2, item2)
 	}
 
 }
 
-func TestMutexQueue_DequeueBlock(t *testing.T) {
-	q := NewMutexQueue[string](2)
+func TestConQueue_DequeueBlock(t *testing.T) {
+	q := NewConQueue[string](2)
 	item1 := "a"
 	_ = q.Enqueue(item1)
 
@@ -110,8 +110,8 @@ func TestMutexQueue_DequeueBlock(t *testing.T) {
 	}
 }
 
-func TestMutexQueue_DequeueBlockAbort(t *testing.T) {
-	q := NewMutexQueue[string](2)
+func TestConQueue_DequeueBlockAbort(t *testing.T) {
+	q := NewConQueue[string](2)
 	item1 := "a"
 	go func ()  {
 		time.Sleep(10 * time.Millisecond)
@@ -122,7 +122,7 @@ func TestMutexQueue_DequeueBlockAbort(t *testing.T) {
 	out, ok := q.DequeueWithBlock(1000)	//block and then return
 	elapsed := time.Since(start)
 	if !ok || out != item1 {
-		t.Errorf("MutexQueue.DequeueWithBlock() got = %v (ok=%v), want = %v", out, ok, item1)
+		t.Errorf("ConQueue.DequeueWithBlock() got = %v (ok=%v), want = %v", out, ok, item1)
 	}
 	if elapsed > 500 * time.Millisecond {
 		t.Errorf("Cost %v, longer than expected.", elapsed)

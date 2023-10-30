@@ -13,11 +13,11 @@ func TestPutAndGet(t *testing.T) {
 	}{
 		{
 			name: "exist 1",
-			args: args{"a","123"},
+			args: args{"a", "123"},
 		},
 		{
 			name: "exist 2",
-			args: args{"ab","fefe"},
+			args: args{"ab", "fefe"},
 		},
 	}
 	m := NewConMap[string, string]()

@@ -5,18 +5,17 @@ import (
 	"time"
 )
 
-
-type MutexQueue[T any] struct {
+type ConQueue[T any] struct {
 	buffer chan T
 }
 
-func NewMutexQueue[T any](capacity int) *MutexQueue[T] {
-	return &MutexQueue[T]{
+func NewConQueue[T any](capacity int) *ConQueue[T] {
+	return &ConQueue[T]{
 		buffer: make(chan T, capacity),
 	}
 }
 
-func (r *MutexQueue[T]) Enqueue(item T) error {
+func (r *ConQueue[T]) Enqueue(item T) error {
 	select {
 	case r.buffer <- item:
 		return nil
@@ -25,18 +24,18 @@ func (r *MutexQueue[T]) Enqueue(item T) error {
 	}
 }
 
-func (r *MutexQueue[T]) Dequeue() (T, bool) {
+func (r *ConQueue[T]) Dequeue() (T, bool) {
 	select {
-	case item := <- r.buffer:
+	case item := <-r.buffer:
 		return item, true
 	default:
 		return *new(T), false
 	}
 }
 
-func (r *MutexQueue[T]) DequeueWithBlock(timeout int) (T, bool) {
+func (r *ConQueue[T]) DequeueWithBlock(timeout int) (T, bool) {
 	select {
-	case item := <- r.buffer:
+	case item := <-r.buffer:
 		return item, true
 	case <-time.After(time.Duration(timeout) * time.Millisecond):
 		return *new(T), false
