@@ -1,6 +1,9 @@
 package somegoutil
 
-import "testing"
+import (
+	"math/rand"
+	"testing"
+)
 
 func TestPutAndGet(t *testing.T) {
 	type args struct {
@@ -32,5 +35,20 @@ func TestPutAndGet(t *testing.T) {
 				t.Errorf("Expect %v but got %v", tt.args.value, v)
 			}
 		})
+	}
+}
+
+func BenchmarkPut(b *testing.B) {
+	m := NewConMap[int32, string]()
+	for i := 0; i < b.N; i++ {
+		m.Put(rand.Int31(), "avalue")
+	}
+}
+
+func BenchmarkGet(b *testing.B) {
+	m := NewConMap[string, string]()
+	m.Put("akey", "avalue123")
+	for i := 0; i < b.N; i++ {
+		m.Get("akey")
 	}
 }
