@@ -1,6 +1,7 @@
 package somegoutil
 
 import (
+	"fmt"
 	"testing"
 	"time"
 )
@@ -127,4 +128,29 @@ func TestConQueue_DequeueBlockAbort(t *testing.T) {
 	if elapsed > 500 * time.Millisecond {
 		t.Errorf("Cost %v, longer than expected.", elapsed)
 	}
+}
+
+func ExampleConQueue() {
+	q := NewConQueue[string](2)
+	item1 := "a"
+	item2 := "b"
+	err1 := q.Enqueue(item1)
+	if err1 != nil {
+		fmt.Printf("Got enqueue error: %v", err1)
+	}
+	err2 := q.Enqueue(item2)
+	if err2 != nil {
+		fmt.Printf("Got enqueue error: %v", err2)
+	}
+	out1, ok1 := q.Dequeue()
+	if ok1 {
+		fmt.Println(out1)
+	}
+	out2, ok2 := q.Dequeue()
+	if ok2 {
+		fmt.Println(out2)
+	}
+	// Output:
+	// a
+	// b
 }
