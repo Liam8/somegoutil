@@ -66,9 +66,9 @@ func TestRandomPick(t *testing.T) {
 	set := NewRandSet[int]()
 	set.Add(123)
 	set.Add(456)
-	for i := 10; i>0; i-- {
+	for i := 10; i > 0; i-- {
 		v := set.RandomPick()
-		if v!=123 && v!=456 {
+		if v != 123 && v != 456 {
 			t.Errorf("RandomPick() returned unpected value = %v", v)
 		}
 	}

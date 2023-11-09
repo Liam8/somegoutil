@@ -3,13 +3,13 @@ package somegoutil
 import "math/rand"
 
 type RandSet[T comparable] struct {
-	arr []T
+	arr    []T
 	idxMap map[T]int
 }
 
 func NewRandSet[T comparable]() *RandSet[T] {
 	return &RandSet[T]{
-		arr: []T{},
+		arr:    []T{},
 		idxMap: map[T]int{},
 	}
 }
@@ -30,11 +30,11 @@ func (r *RandSet[T]) Remove(val T) {
 		return
 	}
 
-	lastIdx := len(r.arr)-1
+	lastIdx := len(r.arr) - 1
 	r.arr[idx] = r.arr[lastIdx]
 	r.idxMap[r.arr[idx]] = idx
 
-	r.arr = r.arr[:len(r.arr) - 1]
+	r.arr = r.arr[:len(r.arr)-1]
 	delete(r.idxMap, val)
 }
 

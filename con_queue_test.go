@@ -48,10 +48,10 @@ func TestConQueue_Dequeue(t *testing.T) {
 		want1  bool
 	}{
 		{
-			name:    "dequeue a number",
-			fields:  fields{buffer: make(chan int, 10)},
-			want:    0,
-			want1: false,
+			name:   "dequeue a number",
+			fields: fields{buffer: make(chan int, 10)},
+			want:   0,
+			want1:  false,
 		},
 	}
 	for _, tt := range tests {
@@ -76,7 +76,7 @@ func TestConQueue_EnDequeue(t *testing.T) {
 	item2 := "b"
 	in1 := q.Enqueue(item1)
 	in2 := q.Enqueue(item2)
-	if in1!=nil || in2!=nil {
+	if in1 != nil || in2 != nil {
 		t.Errorf("ConQueue.Eequeue() failed")
 	}
 	in3 := q.Enqueue(item2)
@@ -100,13 +100,13 @@ func TestConQueue_DequeueBlock(t *testing.T) {
 	_ = q.Enqueue(item1)
 
 	start := time.Now()
-	q.DequeueWithBlock(1000)	//won't block
-	q.DequeueWithBlock(10)		//should block for 10ms
+	q.DequeueWithBlock(1000) //won't block
+	q.DequeueWithBlock(10)   //should block for 10ms
 	elapsed := time.Since(start)
-	if elapsed < 10 * time.Millisecond {
+	if elapsed < 10*time.Millisecond {
 		t.Errorf("Cost %v, shorter than expected.", elapsed)
 	}
-	if elapsed > 20 * time.Millisecond {
+	if elapsed > 20*time.Millisecond {
 		t.Errorf("Cost %v, longer than expected.", elapsed)
 	}
 }
@@ -114,18 +114,18 @@ func TestConQueue_DequeueBlock(t *testing.T) {
 func TestConQueue_DequeueBlockAbort(t *testing.T) {
 	q := NewConQueue[string](2)
 	item1 := "a"
-	go func ()  {
+	go func() {
 		time.Sleep(10 * time.Millisecond)
 		_ = q.Enqueue(item1)
-	} ()
+	}()
 
 	start := time.Now()
-	out, ok := q.DequeueWithBlock(1000)	//block and then return
+	out, ok := q.DequeueWithBlock(1000) //block and then return
 	elapsed := time.Since(start)
 	if !ok || out != item1 {
 		t.Errorf("ConQueue.DequeueWithBlock() got = %v (ok=%v), want = %v", out, ok, item1)
 	}
-	if elapsed > 500 * time.Millisecond {
+	if elapsed > 500*time.Millisecond {
 		t.Errorf("Cost %v, longer than expected.", elapsed)
 	}
 }
