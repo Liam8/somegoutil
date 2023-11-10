@@ -1,6 +1,7 @@
 package somegoutil
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -28,4 +29,10 @@ func (r *ConMap[K, V]) Get(key K) (V, bool) {
 
 	val, ok := r.data[key]
 	return val, ok
+}
+
+func (r *ConMap[K, V]) String() string {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+	return fmt.Sprintf("%v", r.data)
 }

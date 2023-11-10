@@ -1,6 +1,9 @@
 package somegoutil
 
-import "math/rand"
+import (
+	"fmt"
+	"math/rand"
+)
 
 type RandSet[T comparable] struct {
 	arr    []T
@@ -49,4 +52,8 @@ func (r *RandSet[T]) RandomPick() T {
 func (r *RandSet[T]) Exists(val T) bool {
 	_, ok := r.idxMap[val]
 	return ok
+}
+
+func (r *RandSet[T]) String() string {
+	return fmt.Sprintf("%v", r.arr)
 }

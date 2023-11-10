@@ -1,6 +1,7 @@
 package somegoutil
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -71,5 +72,16 @@ func TestRandomPick(t *testing.T) {
 		if v != 123 && v != 456 {
 			t.Errorf("RandomPick() returned unpected value = %v", v)
 		}
+	}
+}
+
+func TestRandomSet_String(t *testing.T) {
+	set := NewRandSet[int]()
+	set.Add(123)
+	set.Add(456)
+	str := fmt.Sprintf("%v", set)
+	want := "[123 456]"
+	if str != want {
+		t.Errorf("Expect %v but got %v", want, str)
 	}
 }

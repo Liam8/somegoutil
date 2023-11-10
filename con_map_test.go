@@ -1,6 +1,7 @@
 package somegoutil
 
 import (
+	"fmt"
 	"math/rand"
 	"testing"
 )
@@ -50,5 +51,15 @@ func BenchmarkGet(b *testing.B) {
 	m.Put("akey", "avalue123")
 	for i := 0; i < b.N; i++ {
 		m.Get("akey")
+	}
+}
+
+func TestString(t *testing.T) {
+	m := NewConMap[string, string]()
+	m.Put("akey", "avalue123")
+	str := fmt.Sprintf("%v", m)
+	exp := "map[akey:avalue123]"
+	if str != exp {
+		t.Errorf("Expect %v but got %v", exp, str)
 	}
 }
