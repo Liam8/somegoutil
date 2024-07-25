@@ -33,7 +33,7 @@ func (r *RandSet[T]) Remove(val T) {
 		return
 	}
 
-	lastIdx := len(r.arr) - 1
+	lastIdx := len(r.arr) - 1	// at least 1 element
 	r.arr[idx] = r.arr[lastIdx]
 	r.idxMap[r.arr[idx]] = idx
 
